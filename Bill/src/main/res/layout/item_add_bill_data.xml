@@ -22,8 +22,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/transparent_dark40"
-        android:gravity="center_vertical"
+        android:background="@color/transparent_dark20"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/base_xhdpi"
         android:paddingEnd="@dimen/base_xhdpi"
@@ -33,9 +32,19 @@
         <TextView
             android:id="@+id/name"
             style="@style/BaseMainTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            tools:text="angcyo"/>
+
+        <com.angcyo.uiview.widget.TimeTextView
+            android:id="@+id/time"
+            style="@style/BaseMainTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingStart="@dimen/base_hdpi"
+            android:textSize="12dp"
             tools:text="angcyo"/>
 
         <com.angcyo.uiview.widget.RTextView

@@ -21,21 +21,26 @@ import io.realm.RealmList
 /**
  * Created by angcyo on 2018/02/14 16:04
  */
-class AddBillUIView : BaseRecyclerUIView<String, GoodsRealm, String>() {
+class AddBillUIView(var isAddBill: Boolean = true /*是否是添加账单*/) : BaseRecyclerUIView<String, GoodsRealm, String>() {
 
     /**准备添加的账单数据*/
-    val addBillRealm = BillRealm().apply {
+    var addBillRealm = BillRealm().apply {
         goodsList = RealmList<GoodsRealm>()
     }
 
     override fun getTitleBar(): TitleBarPattern {
         return super.getTitleBar()
-                .setTitleString("添加账单")
-                .addRightItem(TitleBarPattern.TitleBarItem("保存") {
+                .setTitleString(if (isAddBill) "添加账单" else "修改账单")
+                .addRightItem(TitleBarPattern.TitleBarItem(if (isAddBill) "保存" else "更新") {
                     if (TextUtils.isEmpty(addBillRealm.user)) {
                     } else {
-                        RRealm.save(addBillRealm)
-                        Tip.ok("保存成功")
+                        if (isAddBill) {
+                            RRealm.save(addBillRealm)
+                            Tip.ok("保存成功")
+                        } else {
+                            RRealm.update(addBillRealm)
+                            Tip.ok("更新成功")
+                        }
                     }
                     finishIView()
                 })
@@ -77,7 +82,9 @@ class AddBillUIView : BaseRecyclerUIView<String, GoodsRealm, String>() {
                             super.onDateSelector(wheelTime)
                             //addBillRealm.createTime =
                             wheelTime?.let {
-                                addBillRealm.createTime = DateDialog.parseTime("${it.selectorYear}-${it.selectorMonth}-${it.selectorDay} ${nowDataTime.split(" ")[1]}:0")
+                                RRealm.exe {
+                                    addBillRealm.createTime = DateDialog.parseTime("${wheelTime.selectorYear}-${wheelTime.selectorMonth}-${wheelTime.selectorDay} ${nowDataTime.split(" ")[1]}:0")
+                                }
                             }
                             notifyItemChanged(0)
                         }
@@ -89,8 +96,10 @@ class AddBillUIView : BaseRecyclerUIView<String, GoodsRealm, String>() {
                     startIView(UserInputDialog().apply {
                         inputHintString = holder.item(R.id.user_info_layout).textView.text.toString()
                         inputDefaultString = addBillRealm.user
-                        onInputTextResult = {
-                            addBillRealm.user = it
+                        onInputTextResult = { result ->
+                            RRealm.exe {
+                                addBillRealm.user = result
+                            }
                             notifyItemChanged(0)
                         }
                     })
@@ -118,6 +127,12 @@ class AddBillUIView : BaseRecyclerUIView<String, GoodsRealm, String>() {
                 holder.tv(R.id.trade_price).text = "总计:"
                 holder.tv(R.id.trade_price_all).text = "${tpAll}元"
 
+//                if (isAddBill) {
+//                    holder.visible(R.id.add_goods_button)
+//                } else {
+//                    holder.gone(R.id.add_goods_button)
+//                }
+
                 holder.click(R.id.add_goods_button) {
                     startIView(GoodsInputDialog().apply {
                         inputHintString = "输入商品名称"
@@ -126,12 +141,15 @@ class AddBillUIView : BaseRecyclerUIView<String, GoodsRealm, String>() {
                             if (it.isNotEmpty()) {
                                 val count = mExBaseAdapter.dataCount
                                 val goodsRealm = getGoodsRealm()
-                                RRealm.save(goodsRealm)
-                                addBillRealm.addGoods(goodsRealm)
-                                mExBaseAdapter.notifyItemInserted(headerCount + count)
-                                mExBaseAdapter.notifyItemChanged(headerCount)
-                                mExBaseAdapter.notifyItemChanged(headerCount + dataCount)
-                                mExBaseAdapter.notifyItemRangeChanged(headerCount + count, itemCount)
+
+                                RRealm.exe {
+                                    it.copyToRealm(goodsRealm)
+                                    addBillRealm.addGoods(goodsRealm)
+                                    mExBaseAdapter.notifyItemInserted(headerCount + count)
+                                    mExBaseAdapter.notifyItemChanged(headerCount)
+                                    mExBaseAdapter.notifyItemChanged(headerCount + dataCount)
+                                    mExBaseAdapter.notifyItemRangeChanged(headerCount + count, itemCount)
+                                }
                             }
                         }
                     })
@@ -151,6 +169,7 @@ class AddBillUIView : BaseRecyclerUIView<String, GoodsRealm, String>() {
 
                 dataBean?.let {
                     holder.tv(R.id.name).text = it.name
+                    holder.timeV(R.id.time).time = it.createTime
                     holder.tv(R.id.unit).text = "${it.num}${it.unit}"
 
                     holder.tv(R.id.price).text = "价格:${it.price}元/${it.unit}"

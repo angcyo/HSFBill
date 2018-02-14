@@ -11,6 +11,7 @@ import com.angcyo.uiview.base.SingleItem
 import com.angcyo.uiview.model.TitleBarPattern
 import com.angcyo.uiview.recycler.RBaseViewHolder
 import com.angcyo.uiview.resources.ResUtil
+import io.realm.RealmResults
 
 /**
  * Created by angcyo on 2018/02/13 23:12
@@ -39,9 +40,35 @@ class MainUIView : BaseItemUIView() {
         items.add(object : SingleItem() {
             override fun onBindView(holder: RBaseViewHolder, posInData: Int, dataBean: Item?) {
                 RRealm.where {
-                    holder.tv(R.id.bill_num_view).text = "${it.where(BillRealm::class.java).findAll().size}"
-                    holder.tv(R.id.complete_num_view).text = "${it.where(BillRealm::class.java).equalTo("statue", Integer.valueOf(1)).findAll().size}"
-                    holder.tv(R.id.other_num_view).text = "${it.where(BillRealm::class.java).notEqualTo("statue", Integer.valueOf(1)).findAll().size}"
+                    val allBill = it.where(BillRealm::class.java).findAll()
+                    val cAllBill = it.where(BillRealm::class.java).equalTo("statue", Integer.valueOf(1)).findAll()
+                    val oAllBill = it.where(BillRealm::class.java).notEqualTo("statue", Integer.valueOf(1)).findAll()
+
+                    holder.tv(R.id.bill_num_view).text = "${allBill.size}"
+                    holder.tv(R.id.complete_num_view).text = "${cAllBill.size}"
+                    holder.tv(R.id.other_num_view).text = "${oAllBill.size}"
+
+                    fun priceSum(bills: RealmResults<BillRealm>, result: (Float, Float) -> Unit) {
+                        var pAll = 0f
+                        var tpAll = 0f
+                        for (bill in bills) {
+                            for (goods in bill.goodsList) {
+                                pAll += goods.price * goods.num
+                                tpAll += goods.tradePrice * goods.num
+                            }
+                        }
+                        result.invoke(pAll, tpAll)
+                    }
+
+                    priceSum(allBill) { fl1, fl2 ->
+                        holder.tv(R.id.all_price).text = "${fl1}"
+                    }
+                    priceSum(cAllBill) { fl1, fl2 ->
+                        holder.tv(R.id.complete_price_view).text = "${fl1}"
+                    }
+                    priceSum(oAllBill) { fl1, fl2 ->
+                        holder.tv(R.id.other_price_view).text = "${fl1}"
+                    }
                 }
 
                 RRealm.where {
@@ -65,7 +92,10 @@ class MainUIView : BaseItemUIView() {
                     startIView(AddBillUIView())
                 }
                 holder.click(R.id.see_all_button) {
-                    startIView(AddBillUIView())
+                    startIView(AllBillUIView())
+                }
+                holder.click(R.id.see_all_goods_button) {
+                    startIView(AllGoodsUIView())
                 }
             }
 

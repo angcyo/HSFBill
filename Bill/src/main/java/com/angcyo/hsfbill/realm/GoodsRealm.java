@@ -47,6 +47,19 @@ public class GoodsRealm extends RealmObject {
     private String ext2 = "";
     private String ext3 = "";
 
+    /**
+     * 创建时间
+     */
+    private long createTime = System.currentTimeMillis();
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
     public String getExt1() {
         return ext1;
     }

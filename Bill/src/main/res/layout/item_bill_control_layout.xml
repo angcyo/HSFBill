@@ -3,18 +3,40 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:paddingTop="100dp">
 
-    <com.angcyo.uiview.widget.Button
-        android:id="@+id/see_all_button"
-        style="@style/BaseSkinButtonStyle2"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/base_xhdpi"
-        android:layout_marginStart="@dimen/base_xhdpi"
-        android:layout_marginTop="@dimen/base_xhdpi"
-        android:text="浏览所有账单"
-        app:r_button_style="ROUND_GRADIENT_RECT"/>
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/base_xhdpi"
+        android:paddingStart="@dimen/base_xhdpi">
+
+        <com.angcyo.uiview.widget.Button
+            android:id="@+id/see_all_button"
+            style="@style/BaseSkinButtonStyle2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="浏览所有账单"
+            app:r_button_style="ROUND_GRADIENT_RECT"/>
+
+        <Space
+            android:layout_width="@dimen/base_xxhdpi"
+            android:layout_height="wrap_content"/>
+
+        <com.angcyo.uiview.widget.Button
+            android:id="@+id/see_all_goods_button"
+            style="@style/BaseSkinButtonStyle2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="查看商品详情"
+            app:r_button_style="ROUND_GRADIENT_RECT"/>
+
+
+    </LinearLayout>
 
     <com.angcyo.uiview.widget.Button
         android:id="@+id/add_bill_button"

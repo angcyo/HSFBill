@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/base_bg_selector_v21"
+    android:paddingBottom="@dimen/base_xhdpi">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent_dark20"
+            android:orientation="horizontal"
+            android:padding="@dimen/base_xhdpi">
+
+            <TextView
+                android:id="@+id/name_view"
+                style="@style/BaseMainTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="angcyo"/>
+
+            <com.angcyo.uiview.widget.TimeTextView
+                android:id="@+id/time_view"
+                style="@style/BaseDarkTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:paddingStart="@dimen/base_hdpi"
+                android:textSize="12dp"/>
+
+            <ImageView
+                android:id="@+id/delete_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/base_bg2_selector_v21"
+                android:padding="@dimen/base_ldpi"
+                android:src="@drawable/base_delete"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/price_all"
+            style="@style/BaseMainTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/base_xhdpi"
+            android:paddingStart="@dimen/base_xhdpi"
+            android:textSize="25dp"
+            tools:text="angcyo"/>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_line"
+            android:layout_marginTop="@dimen/base_hdpi"
+            android:background="@color/base_chat_bg_color"/>
+    </LinearLayout>
+</FrameLayout>
