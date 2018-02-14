@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <com.angcyo.uiview.widget.Button
+        android:id="@+id/see_all_button"
+        style="@style/BaseSkinButtonStyle2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/base_xhdpi"
+        android:layout_marginStart="@dimen/base_xhdpi"
+        android:layout_marginTop="@dimen/base_xhdpi"
+        android:text="浏览所有账单"
+        app:r_button_style="ROUND_GRADIENT_RECT"/>
+
+    <com.angcyo.uiview.widget.Button
+        android:id="@+id/add_bill_button"
+        style="@style/BaseSkinButtonStyle2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/base_xhdpi"
+        android:layout_marginStart="@dimen/base_xhdpi"
+        android:layout_marginTop="@dimen/base_xhdpi"
+        android:text="添加账单"
+        app:r_button_style="ROUND_GRADIENT_RECT"/>
+
+</LinearLayout>
