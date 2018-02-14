@@ -1,5 +1,9 @@
 package com.angcyo.hsfbill.realm;
 
+import android.text.TextUtils;
+
+import com.github.promeg.pinyinhelper.Pinyin;
+
 import io.realm.RealmObject;
 
 /**
@@ -13,9 +17,14 @@ public class GoodsRealm extends RealmObject {
      */
     private String name = "";
     /**
+     * 首字母拼音
+     */
+    private String namePY = "";
+    /**
      * 单位
      */
     private String unit = "";
+    private String unitPY = "";
 
     /**
      * 数量
@@ -34,7 +43,7 @@ public class GoodsRealm extends RealmObject {
     /**
      * 备用扩展属性
      */
-    private String ext1 = "";
+    private String ext1 = ""; //商品备注信息
     private String ext2 = "";
     private String ext3 = "";
 
@@ -68,6 +77,9 @@ public class GoodsRealm extends RealmObject {
 
     public void setName(String name) {
         this.name = name;
+        if (!TextUtils.isEmpty(name)) {
+            namePY = String.valueOf(Pinyin.toPinyin(name.charAt(0)).charAt(0)).toUpperCase();
+        }
     }
 
     public String getUnit() {
@@ -76,6 +88,9 @@ public class GoodsRealm extends RealmObject {
 
     public void setUnit(String unit) {
         this.unit = unit;
+        if (!TextUtils.isEmpty(unit)) {
+            unitPY = String.valueOf(Pinyin.toPinyin(unit.charAt(0)).charAt(0)).toUpperCase();
+        }
     }
 
     public int getNum() {
@@ -100,5 +115,21 @@ public class GoodsRealm extends RealmObject {
 
     public void setTradePrice(float tradePrice) {
         this.tradePrice = tradePrice;
+    }
+
+    public String getNamePY() {
+        return namePY;
+    }
+
+    public void setNamePY(String namePY) {
+        this.namePY = namePY;
+    }
+
+    public String getUnitPY() {
+        return unitPY;
+    }
+
+    public void setUnitPY(String unitPY) {
+        this.unitPY = unitPY;
     }
 }

@@ -17,13 +17,17 @@ import java.util.*
  * Created by angcyo on 2018/02/14 17:01
  * 收货单位输入对话框
  */
-class UserInputDialog : UIInputExDialog() {
+open class UserInputDialog : UIInputExDialog() {
     override fun inflateDialogView(dialogRootLayout: FrameLayout, inflater: LayoutInflater): View {
         return inflate(R.layout.dialog_user_input)
     }
 
     override fun initDialogContentView() {
         super.initDialogContentView()
+        initRecyclerView()
+    }
+
+    open fun initRecyclerView() {
         mViewHolder.reV(R.id.recycler_view).apply {
             addItemDecoration(RBaseItemDecoration(getDimensionPixelOffset(R.dimen.base_line), getColor(R.color.base_chat_bg_color)).apply {
                 setDrawLastHLine(true)
@@ -35,7 +39,8 @@ class UserInputDialog : UIInputExDialog() {
 
                 override fun onBindView(holder: RBaseViewHolder, position: Int, bean: BillRealm?) {
                     bean?.let {
-                        holder.tv(R.id.text_view).text = "${it.userPY}  ${it.user}"
+                        holder.tv(R.id.text_view).text = "${it.user}"
+                        holder.tv(R.id.text_view1).text = "${it.userPY}"
 
                         holder.clickItem {
                             setInputText(bean.user)

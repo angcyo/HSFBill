@@ -4,16 +4,38 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@drawable/base_bg_selector_v21"
-              android:orientation="vertical">
+              android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/text_view1"
+        style="@style/BaseMainTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="30dp"
+        android:paddingBottom="@dimen/base_hdpi"
+        android:paddingStart="@dimen/base_xhdpi"
+        android:paddingTop="@dimen/base_hdpi"
+        tools:text="a"/>
 
     <TextView
         android:id="@+id/text_view"
         style="@style/BaseMainTextStyle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingBottom="@dimen/base_hdpi"
+        android:paddingEnd="@dimen/base_xhdpi"
+        android:paddingStart="@dimen/base_ldpi"
+        android:paddingTop="@dimen/base_hdpi"
+        tools:text="angcyo"/>
+
+    <TextView
+        android:id="@+id/text_view2"
+        style="@style/BaseMainTextStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/base_hdpi"
         android:paddingEnd="@dimen/base_xhdpi"
-        android:paddingStart="@dimen/base_xhdpi"
         android:paddingTop="@dimen/base_hdpi"
         tools:text="angcyo"/>
 

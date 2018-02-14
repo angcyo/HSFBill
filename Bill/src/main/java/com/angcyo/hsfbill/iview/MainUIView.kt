@@ -5,6 +5,7 @@ import com.angcyo.hsfbill.R
 import com.angcyo.hsfbill.base.BaseItemUIView
 import com.angcyo.hsfbill.realm.BillRealm
 import com.angcyo.rrealm.RRealm
+import com.angcyo.uiview.Root
 import com.angcyo.uiview.base.Item
 import com.angcyo.uiview.base.SingleItem
 import com.angcyo.uiview.model.TitleBarPattern
@@ -83,6 +84,18 @@ class MainUIView : BaseItemUIView() {
             override fun getItemLayoutId(): Int {
                 return R.layout.item_all_goods_status_info
             }
+        })
+
+        //设备调试信息
+        items.add(object : SingleItem() {
+            override fun onBindView(holder: RBaseViewHolder, posInData: Int, dataBean: Item?) {
+                holder.tv(R.id.text_view).text = Root.device_info(mActivity)
+            }
+
+            override fun getItemLayoutId(): Int {
+                return R.layout.item_version_layout
+            }
+
         })
     }
 }

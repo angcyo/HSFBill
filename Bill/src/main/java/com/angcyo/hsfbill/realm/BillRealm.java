@@ -1,5 +1,9 @@
 package com.angcyo.hsfbill.realm;
 
+import android.text.TextUtils;
+
+import com.github.promeg.pinyinhelper.Pinyin;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
@@ -48,6 +52,9 @@ public class BillRealm extends RealmObject {
 
     public void setUser(String user) {
         this.user = user;
+        if (!TextUtils.isEmpty(user)) {
+            userPY = String.valueOf(Pinyin.toPinyin(user.charAt(0)).charAt(0)).toUpperCase();
+        }
     }
 
     public String getExt1() {
@@ -96,6 +103,13 @@ public class BillRealm extends RealmObject {
 
     public void setGoodsList(RealmList<GoodsRealm> goodsList) {
         this.goodsList = goodsList;
+    }
+
+    public void addGoods(GoodsRealm goods) {
+        if (goodsList == null) {
+            goodsList = new RealmList<>();
+        }
+        this.goodsList.add(goods);
     }
 
     public String getExt4() {
