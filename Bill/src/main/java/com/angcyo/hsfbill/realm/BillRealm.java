@@ -1,12 +1,13 @@
 package com.angcyo.hsfbill.realm;
 
 import io.realm.RealmList;
+import io.realm.RealmObject;
 
 /**
  * Created by angcyo on 2018/02/14 16:17
  * 账单
  */
-public class BillRealm {
+public class BillRealm extends RealmObject {
 
     /**
      * 账单单位名称
@@ -14,11 +15,17 @@ public class BillRealm {
     private String user = "";
 
     /**
+     * 汉子拼音首字母
+     */
+    private String userPY = "";
+
+    /**
      * 备用扩展属性
      */
     private String ext1 = "";
     private String ext2 = "";
     private String ext3 = "";
+    private String ext4 = "";
 
     /**
      * 创建时间
@@ -26,7 +33,7 @@ public class BillRealm {
     private long createTime = System.currentTimeMillis();
 
     /**
-     * 状态: 完成 未完成 进行中...
+     * 状态: 1完成 0未完成 2进行中...
      */
     private int statue = 0;
 
@@ -89,5 +96,22 @@ public class BillRealm {
 
     public void setGoodsList(RealmList<GoodsRealm> goodsList) {
         this.goodsList = goodsList;
+    }
+
+    public String getExt4() {
+        return ext4;
+    }
+
+    public void setExt4(String ext4) {
+        this.ext4 = ext4;
+    }
+
+    public String getUserPY() {
+
+        return userPY;
+    }
+
+    public void setUserPY(String userPY) {
+        this.userPY = userPY;
     }
 }
