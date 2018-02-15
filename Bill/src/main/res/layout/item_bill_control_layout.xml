@@ -23,7 +23,7 @@
             app:r_button_style="ROUND_GRADIENT_RECT"/>
 
         <Space
-            android:layout_width="@dimen/base_xxhdpi"
+            android:layout_width="@dimen/base_xhdpi"
             android:layout_height="wrap_content"/>
 
         <com.angcyo.uiview.widget.Button

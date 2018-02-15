@@ -2,6 +2,7 @@ package com.angcyo.hsfbill.iview
 
 import android.text.TextUtils
 import android.view.View
+import android.widget.CompoundButton
 import com.angcyo.github.pickerview.view.WheelTime
 import com.angcyo.hsfbill.R
 import com.angcyo.hsfbill.base.BaseRecyclerUIView
@@ -11,6 +12,8 @@ import com.angcyo.hsfbill.realm.BillRealm
 import com.angcyo.hsfbill.realm.GoodsRealm
 import com.angcyo.rrealm.RRealm
 import com.angcyo.uiview.github.pickerview.DateDialog
+import com.angcyo.uiview.kotlin.clickIt
+import com.angcyo.uiview.kotlin.nowTime
 import com.angcyo.uiview.model.TitleBarPattern
 import com.angcyo.uiview.recycler.RBaseViewHolder
 import com.angcyo.uiview.recycler.adapter.RExBaseAdapter
@@ -71,8 +74,9 @@ class AddBillUIView(var isAddBill: Boolean = true /*是否是添加账单*/) : B
 
             override fun onBindHeaderView(holder: RBaseViewHolder, posInHeader: Int, headerBean: String?) {
                 super.onBindHeaderView(holder, posInHeader, headerBean)
-                val nowDataTime = RUtils.getDataTime("yyyy-MM-dd HH:mm", addBillRealm.createTime)
-                holder.item(R.id.create_time_info_layout).setItemDarkText(nowDataTime)
+                val createTime = RUtils.getDataTime("yyyy-MM-dd HH:mm", addBillRealm.createTime)
+                val nowTime = RUtils.getDataTime("yyyy-MM-dd HH:mm", nowTime())
+                holder.item(R.id.create_time_info_layout).setItemDarkText(createTime)
                 holder.item(R.id.user_info_layout).setItemDarkText(addBillRealm.user)
 
                 //时间选择
@@ -83,7 +87,7 @@ class AddBillUIView(var isAddBill: Boolean = true /*是否是添加账单*/) : B
                             //addBillRealm.createTime =
                             wheelTime?.let {
                                 RRealm.exe {
-                                    addBillRealm.createTime = DateDialog.parseTime("${wheelTime.selectorYear}-${wheelTime.selectorMonth}-${wheelTime.selectorDay} ${nowDataTime.split(" ")[1]}:0")
+                                    addBillRealm.createTime = DateDialog.parseTime("${wheelTime.selectorYear}-${wheelTime.selectorMonth}-${wheelTime.selectorDay} ${nowTime.split(" ")[1]}:0")
                                 }
                             }
                             notifyItemChanged(0)
@@ -127,11 +131,12 @@ class AddBillUIView(var isAddBill: Boolean = true /*是否是添加账单*/) : B
                 holder.tv(R.id.trade_price).text = "总计:"
                 holder.tv(R.id.trade_price_all).text = "${tpAll}元"
 
-//                if (isAddBill) {
-//                    holder.visible(R.id.add_goods_button)
-//                } else {
-//                    holder.gone(R.id.add_goods_button)
-//                }
+                if (isAddBill) {
+                    holder.tv(R.id.add_goods_button).text = "添加商品"
+                } else {
+                    holder.tv(R.id.add_goods_button).text = "追加商品"
+                }
+
 
                 holder.click(R.id.add_goods_button) {
                     startIView(GoodsInputDialog().apply {
@@ -153,6 +158,18 @@ class AddBillUIView(var isAddBill: Boolean = true /*是否是添加账单*/) : B
                             }
                         }
                     })
+                }
+
+                if (SettingUIView.hideTradePrice) {
+                    holder.invisible(R.id.trade_price_control_layout)
+                }
+
+                if (!isAddBill) {
+                    holder.visible(R.id.bill_status_cb).clickIt { view ->
+                        RRealm.exe {
+                            addBillRealm.statue = if ((view as CompoundButton).isChecked) 1 else 0
+                        }
+                    }
                 }
             }
 
@@ -176,6 +193,10 @@ class AddBillUIView(var isAddBill: Boolean = true /*是否是添加账单*/) : B
                     holder.tv(R.id.price_all).text = "合:${it.price * it.num}元"
                     holder.tv(R.id.trade_price).text = "特价:${it.tradePrice}元/${it.unit}"
                     holder.tv(R.id.trade_price_all).text = "合:${it.tradePrice * it.num}元"
+                }
+
+                if (SettingUIView.hideTradePrice) {
+                    holder.invisible(R.id.trade_price_control_layout)
                 }
             }
         }

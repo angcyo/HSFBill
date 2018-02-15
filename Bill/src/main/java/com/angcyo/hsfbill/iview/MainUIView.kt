@@ -8,6 +8,7 @@ import com.angcyo.rrealm.RRealm
 import com.angcyo.uiview.Root
 import com.angcyo.uiview.base.Item
 import com.angcyo.uiview.base.SingleItem
+import com.angcyo.uiview.kotlin.clickIt
 import com.angcyo.uiview.model.TitleBarPattern
 import com.angcyo.uiview.recycler.RBaseViewHolder
 import com.angcyo.uiview.resources.ResUtil
@@ -22,6 +23,9 @@ class MainUIView : BaseItemUIView() {
         return super.getTitleBar()
                 .setTitleBarBGDrawable(ResUtil.createGradientDrawable())
                 .setTitleString("账单管理")
+                .addRightItem(TitleBarPattern.TitleBarItem(R.mipmap.ico_setting) {
+                    startIView(SettingUIView())
+                })
     }
 
     override fun onBackPressed(): Boolean {
@@ -48,26 +52,49 @@ class MainUIView : BaseItemUIView() {
                     holder.tv(R.id.complete_num_view).text = "${cAllBill.size}"
                     holder.tv(R.id.other_num_view).text = "${oAllBill.size}"
 
-                    fun priceSum(bills: RealmResults<BillRealm>, result: (Float, Float) -> Unit) {
-                        var pAll = 0f
-                        var tpAll = 0f
-                        for (bill in bills) {
-                            for (goods in bill.goodsList) {
-                                pAll += goods.price * goods.num
-                                tpAll += goods.tradePrice * goods.num
+                    val hideAllPrice = SettingUIView.hideAllPrice
+                    if (hideAllPrice) {
+                        holder.tv(R.id.all_price).text = "****"
+                        holder.tv(R.id.complete_price_view).text = "****"
+                        holder.tv(R.id.other_price_view).text = "****"
+
+                        holder.imageView(R.id.see_view).apply {
+                            setImageResource(R.mipmap.ico_see)
+                            clickIt {
+                                SettingUIView.hideAllPrice = !hideAllPrice
+                                notifyItemChanged(0)
                             }
                         }
-                        result.invoke(pAll, tpAll)
-                    }
+                    } else {
+                        holder.imageView(R.id.see_view).apply {
+                            setImageResource(R.mipmap.ico_no_see)
+                            clickIt {
+                                SettingUIView.hideAllPrice = !hideAllPrice
+                                notifyItemChanged(0)
+                            }
+                        }
 
-                    priceSum(allBill) { fl1, fl2 ->
-                        holder.tv(R.id.all_price).text = "${fl1}"
-                    }
-                    priceSum(cAllBill) { fl1, fl2 ->
-                        holder.tv(R.id.complete_price_view).text = "${fl1}"
-                    }
-                    priceSum(oAllBill) { fl1, fl2 ->
-                        holder.tv(R.id.other_price_view).text = "${fl1}"
+                        fun priceSum(bills: RealmResults<BillRealm>, result: (Float, Float) -> Unit) {
+                            var pAll = 0f
+                            var tpAll = 0f
+                            for (bill in bills) {
+                                for (goods in bill.goodsList) {
+                                    pAll += goods.price * goods.num
+                                    tpAll += goods.tradePrice * goods.num
+                                }
+                            }
+                            result.invoke(pAll, tpAll)
+                        }
+
+                        priceSum(allBill) { fl1, fl2 ->
+                            holder.tv(R.id.all_price).text = "${fl1}"
+                        }
+                        priceSum(cAllBill) { fl1, fl2 ->
+                            holder.tv(R.id.complete_price_view).text = "${fl1}"
+                        }
+                        priceSum(oAllBill) { fl1, fl2 ->
+                            holder.tv(R.id.other_price_view).text = "${fl1}"
+                        }
                     }
                 }
 

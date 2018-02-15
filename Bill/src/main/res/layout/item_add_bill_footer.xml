@@ -38,6 +38,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/trade_price_control_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -61,6 +62,19 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/bill_status_cb"
+        style="@style/BaseMainTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/base_ldpi"
+        android:layout_marginTop="@dimen/base_xhdpi"
+        android:paddingBottom="@dimen/base_hdpi"
+        android:paddingTop="@dimen/base_hdpi"
+        android:text="账单已完成"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
     <com.angcyo.uiview.widget.Button
         android:id="@+id/add_goods_button"

@@ -12,6 +12,7 @@ import com.angcyo.uiview.recycler.RBaseViewHolder
 import com.angcyo.uiview.recycler.RRecyclerView
 import com.angcyo.uiview.recycler.adapter.RExBaseAdapter
 import com.angcyo.uiview.rsen.RefreshLayout
+import io.realm.RealmResults
 
 /**
  * Created by angcyo on 2018/02/15 00:38
@@ -19,10 +20,17 @@ import com.angcyo.uiview.rsen.RefreshLayout
  */
 class AllBillUIView : BaseSingleRecyclerUIView<BillRealm>() {
 
-    var billRealmList: MutableList<BillRealm>? = null
+    var billRealmList: RealmResults<BillRealm>? = null
+
+    var canEdit = false
 
     override fun getTitleBar(): TitleBarPattern {
-        return super.getTitleBar().setTitleString("所有账单")
+        return super.getTitleBar()
+                .setTitleString("所有账单")
+                .addRightItem(TitleBarPattern.TitleBarItem(R.mipmap.ico_edit) {
+                    canEdit = true
+                    mExBaseAdapter.notifyDataSetChanged()
+                })
     }
 
     override fun initRefreshLayout(refreshLayout: RefreshLayout?, baseContentLayout: ContentLayout?) {
@@ -46,7 +54,7 @@ class AllBillUIView : BaseSingleRecyclerUIView<BillRealm>() {
         super.onUILoadData(page)
 
         RRealm.where {
-            billRealmList = it.copyFromRealm(it.where(BillRealm::class.java).sort("userPY").findAll())
+            billRealmList = it.where(BillRealm::class.java).sort("userPY").findAll()
 //            billRealmList?.sortWith(Comparator { o1, o2 ->
 //                o1.userPY.compareTo(o2.userPY, true)
 //            })
@@ -61,7 +69,10 @@ class AllBillUIView : BaseSingleRecyclerUIView<BillRealm>() {
 
         override fun onBindDataView(holder: RBaseViewHolder, posInData: Int, dataBean: BillRealm?) {
             super.onBindDataView(holder, posInData, dataBean)
-            holder.visible(R.id.delete_view)
+
+            if (canEdit) {
+                holder.visible(R.id.delete_view)
+            }
 
             dataBean?.let {
                 holder.tv(R.id.name_view).text = it.user
@@ -76,9 +87,13 @@ class AllBillUIView : BaseSingleRecyclerUIView<BillRealm>() {
                                             .equalTo("user", dataBean.user)
                                             .and()
                                             .equalTo("createTime", dataBean.createTime).findAll().deleteAllFromRealm()
+
+                                    val adapterPosition = headerCount + posInData
                                     //dataBean.deleteFromRealm()
                                     //billRealmList?.deleteFromRealm()
-                                    deleteItem(posInData)
+                                    //deleteItem(posInData)
+                                    notifyItemRemoved(adapterPosition)
+                                    notifyItemRangeChanged(adapterPosition, itemCount - adapterPosition)
                                 }
                             }
                             .showDialog(mParentILayout)
